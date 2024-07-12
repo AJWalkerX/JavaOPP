@@ -1,4 +1,4 @@
-package com.ajwalker.oppUsage;
+package com.ajwalker.week03.day05.oppUsage;
 
 public class ArabaMain {
 	public static void main(String[] args) {
@@ -7,11 +7,10 @@ public class ArabaMain {
 		//Ulaşabilmek için referanslarını tutacak değişkenlere atamak gereklidir.
 		//Constructor methodlar geriye değer dönme ile ilgili bir tanımlama içermez.
 		//Ancak geriye oluşturulan nesnenin bellek adresini dönerler.
-		Araba araba1 = new Araba();
-		araba1.marka = "Audi";
-		araba1.model = "A3";
+		Araba araba1 = new Araba("Audi","A3");
 		araba1.yil = "2020";
 		araba1.km = 10_000;
+		
 		araba1.hiz = 0;
 		
 		Araba araba2 = new Araba();
@@ -22,6 +21,15 @@ public class ArabaMain {
 		araba2.hiz = 50;
 		
 		System.out.println(araba1.toString());
-		System.out.println(araba2.toString());
+		System.out.println(araba2.getInfo());
+		
+		araba1.hizlan(500);
+		araba1.yavasla(100);
+		araba1.yavasla(200);
+		araba1.yavasla(90);
+		araba1.yavasla(90);
+		araba1.yavasla(90);
+		araba1.yavasla(100);
+		
 	}
 }

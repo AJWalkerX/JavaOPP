@@ -1,5 +1,7 @@
 package com.ajwalker.week03.day05.oppUsage;
 
+import com.ajwalker.week04.constant.Constant;
+
 public class Araba {
 	//Özellikler, üye değişkenler, Field, Nesne değişkenleri.
 	public String marka;
@@ -8,6 +10,8 @@ public class Araba {
 	public int km;// primirive datatype'ların defult degeri devreye girer.
 	// Ama wrapper classlar(Integer gibi) null degeri taşır. Onun üzerine ilk değer verilmeden işlem yapılamaz.
 	public Integer hiz;
+	
+	public Motor motor; //Araba has a motor
 
 //	Constructor method: Sınıf ismiyle aynı isme sahip, geri donuş ile ilgili herhangi bir değer içermeten bir
 //	metod'tur.
@@ -27,8 +31,8 @@ public class Araba {
 	}
 	public void hizlan(int yeniHiz){
 		hiz += yeniHiz;
-		if (hiz > 180){
-			hiz = 180;
+		if (hiz > Constant.MAX_SPEED){
+			hiz = Constant.MAX_SPEED;
 		}
 		
 		System.out.println(hiz);
@@ -38,8 +42,8 @@ public class Araba {
 	}
 	public void yavasla(int yavaslamaMiktari){
 		hiz-=yavaslamaMiktari;
-		if (hiz < 0){
-			hiz = 0;
+		if (hiz < Constant.MIN_SPEED){
+			hiz = Constant.MAX_SPEED;
 		}
 		System.out.println(hiz);
 	}

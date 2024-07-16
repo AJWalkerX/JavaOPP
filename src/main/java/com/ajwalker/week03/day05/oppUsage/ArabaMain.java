@@ -10,8 +10,15 @@ public class ArabaMain {
 		Araba araba1 = new Araba("Audi","A3");
 		araba1.yil = "2020";
 		araba1.km = 10_000;
-		
 		araba1.hiz = 0;
+		
+		Motor motor1 = new Motor();
+		motor1.motorHacmi=1400;
+		motor1.beygir=140;
+		motor1.sasiNo="SE010MKN";
+		motor1.tork=40;
+		
+		araba1.motor=motor1;
 		
 		Araba araba2 = new Araba();
 		araba2.marka = "Toyota";

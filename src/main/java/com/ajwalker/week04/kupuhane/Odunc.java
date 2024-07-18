@@ -8,6 +8,8 @@ kitap
 oduncAlmaTarihi
 teslimTarihi*/
 public class Odunc {
+	private static int oduncIndex;
+	
 	//Nesne değişkenleri
 	private int oduncNo;
 	private Uye uye;
@@ -20,11 +22,10 @@ public class Odunc {
 	public Odunc() {
 	}
 	
-	public Odunc(Kitap kitap, String oduncAlmaTarihi, int oduncNo, String teslimTarihi, Uye uye) {
+	public Odunc(Kitap kitap, String oduncAlmaTarihi, Uye uye) {
 		this.kitap = kitap;
 		this.oduncAlmaTarihi = oduncAlmaTarihi;
-		this.oduncNo = oduncNo;
-		this.teslimTarihi = teslimTarihi;
+		this.oduncNo = ++oduncIndex;
 		this.uye = uye;
 	}
 	//Getter & Setter

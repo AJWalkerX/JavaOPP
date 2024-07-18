@@ -14,6 +14,9 @@ puan
 oduncAldıgıKitapSayisi
 */
 public class Uye {
+	//Sınıf değişkeni
+	private static int uyeIndex;
+	
 	//Nesne değişkenleri:
 	private int uyeNo;
 	private String ad;
@@ -31,18 +34,17 @@ public class Uye {
 	public Uye() {
 	}
 	
-	public Uye(String ad, String adres, String dTarihi, String kayiTarihi, int oduncAldigiKitapSayisi, int puan,
-	           String soyAd, String tc, String telNo, int uyeNo) {
+	public Uye(String ad, String adres, String dTarihi, String kayiTarihi,
+	           String soyAd, String tc, String telNo) {
 		this.ad = ad;
 		this.adres = adres;
 		this.dTarihi = dTarihi;
 		this.kayiTarihi = kayiTarihi;
-		this.oduncAldigiKitapSayisi = oduncAldigiKitapSayisi;
-		this.puan = puan;
+		this.puan = 100;
 		this.soyAd = soyAd;
 		this.tc = tc;
 		this.telNo = telNo;
-		this.uyeNo = uyeNo;
+		this.uyeNo = ++uyeIndex;
 	}
 	//Getter & Setter
 	

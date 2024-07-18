@@ -15,10 +15,9 @@ public class Kitap {
 	//Constructor:
 	public Kitap(){}
 	
-	public Kitap(String ad, int adet, double fiyat, String ISBN, int sayfaSayisi, String tur, String yayinEvi, String yayinYili, String yazar) {
+	public Kitap(String ad, String ISBN, int sayfaSayisi, String tur, String yayinEvi, String yayinYili, String yazar) {
 		this.ad = ad;
-		this.adet = adet;
-		this.fiyat = fiyat;
+		this.adet = 1;
 		this.ISBN = ISBN;
 		this.sayfaSayisi = sayfaSayisi;
 		this.tur = tur;
@@ -41,14 +40,6 @@ public class Kitap {
 	
 	public void setAdet(int adet) {
 		this.adet = adet;
-	}
-	
-	public double getFiyat() {
-		return fiyat;
-	}
-	
-	public void setFiyat(double fiyat) {
-		this.fiyat = fiyat;
 	}
 	
 	public String getISBN() {
@@ -103,7 +94,7 @@ public class Kitap {
 	public String toString() {
 		return "Kitap{" + "ad='" + getAd() +
 				'\'' + ", ISBN='" + getISBN() +
-				'\'' + ", fiyat=" + getFiyat() + ", tur='" + getTur() +
+				'\'' + ", tur='" + getTur() +
 				'\'' + ", sayfaSayisi=" + getSayfaSayisi() + ", adet=" + getAdet() + ", yazar='" + getYazar() +
 				'\'' + ", yayinEvi='" + getYayinEvi() +
 				'\'' + ", yayinYili='" + getYayinYili() + '\'' + '}';

@@ -8,6 +8,7 @@ public class Kitap {
 	private String tur;
 	private int sayfaSayisi;
 	private int adet;
+	private int stok;
 	private String yazar;
 	private String yayinEvi;
 	private String yayinYili;
@@ -18,6 +19,7 @@ public class Kitap {
 	public Kitap(String ad, String ISBN, int sayfaSayisi, String tur, String yayinEvi, String yayinYili, String yazar) {
 		this.ad = ad;
 		this.adet = 1;
+		this.stok = 1;
 		this.ISBN = ISBN;
 		this.sayfaSayisi = sayfaSayisi;
 		this.tur = tur;
@@ -38,10 +40,16 @@ public class Kitap {
 		return adet;
 	}
 	
+	public int getStok() {
+		return stok;
+	}
 	public void setAdet(int adet) {
 		this.adet = adet;
 	}
 	
+	public void setStok(int stok) {
+		this.stok = stok;
+	}
 	public String getISBN() {
 		return ISBN;
 	}
@@ -89,14 +97,9 @@ public class Kitap {
 	public void setYazar(String yazar) {
 		this.yazar = yazar;
 	}
-	//toString()
+	
 	@Override
 	public String toString() {
-		return "Kitap{" + "ad='" + getAd() +
-				'\'' + ", ISBN='" + getISBN() +
-				'\'' + ", tur='" + getTur() +
-				'\'' + ", sayfaSayisi=" + getSayfaSayisi() + ", adet=" + getAdet() + ", yazar='" + getYazar() +
-				'\'' + ", yayinEvi='" + getYayinEvi() +
-				'\'' + ", yayinYili='" + getYayinYili() + '\'' + '}';
+		return "Kitap{" + "ad='" + getAd() + '\'' + ", ISBN='" + getISBN() + '\'' + ", fiyat=" + fiyat + ", tur='" + getTur() + '\'' + ", sayfaSayisi=" + getSayfaSayisi() + ", adet=" + getAdet() + ", stok=" + getStok() + ", yazar='" + getYazar() + '\'' + ", yayinEvi='" + getYayinEvi() + '\'' + ", yayinYili='" + getYayinYili() + '\'' + '}';
 	}
 }

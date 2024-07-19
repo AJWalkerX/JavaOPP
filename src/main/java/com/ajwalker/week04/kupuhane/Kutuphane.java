@@ -1,8 +1,7 @@
 package com.ajwalker.week04.kupuhane;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Locale;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /*
 * kitaplar
@@ -21,6 +20,8 @@ public class Kutuphane {
 	private static final int KITAP_KAPASITE = 200;
 	private static final int UYE_KAPASITE = 50;
 	private static final int ODUNC_KAPASITE = 50;
+	private static final int ODUNC_SURESI = 15; //15 gün
+	private static final int PUAN_CEZASI = 1; //
 	
 	//Nesne değişkenleri
 	private Uye[] uyeler;
@@ -35,10 +36,8 @@ public class Kutuphane {
 	private int oduncSayisi;
 	private int oduncSuresi;
 	private int gecikmePuan;
-	private Instant localDate;
 	
 	//Constructor
-	
 	public Kutuphane() {
 		kitaplar = new Kitap[KITAP_KAPASITE];
 		uyeler = new Uye[UYE_KAPASITE];
@@ -47,10 +46,11 @@ public class Kutuphane {
 	//kitapEkle
 	public boolean kitapEkle(Kitap eklenecekKitap){
 		if (kitapSayisi <KITAP_KAPASITE){
-			int varOlanKitapIndex = kitapVarMi(eklenecekKitap);
+			int varOlanKitapIndex = kitapBul(eklenecekKitap);
 			if (varOlanKitapIndex != -1){
 				//Daha önceden eklenmiş bir kitap varsa;
 				kitaplar[varOlanKitapIndex].setAdet(kitaplar[varOlanKitapIndex].getAdet()+1);
+				kitaplar[varOlanKitapIndex].setStok(kitaplar[varOlanKitapIndex].getStok()+1);
 				kitapSayisi++;
 				System.out.println(eklenecekKitap.getAd()+ " adlı kitabın adet degeri 1 artırıldı.");
 			}
@@ -74,7 +74,7 @@ public class Kutuphane {
 	@return aradığımız ISBN'li kitap dizide bulunuyorsa bulunduğu index değeri geri dönecek, aradığımız ISBN dizide
 	bulunamazsa -1 dönecek.
 	* */
-	public int kitapVarMi(Kitap eklenecekKitap){
+	public int kitapBul(Kitap eklenecekKitap) {
 		for (int i = 0; i< kitapIndex; i++){
 			if (kitaplar[i].getISBN().equals(eklenecekKitap.getISBN())){
 				return i;
@@ -170,7 +170,7 @@ public class Kutuphane {
 			System.out.println("Ödünç listesi dolu!");
 			return;
 		}
-		Odunc yeniOdunc = new Odunc(oduncVerilecekKitap, localDate.now().toString(),oduncAlacakUye);
+		Odunc yeniOdunc = new Odunc(oduncVerilecekKitap, LocalDate.now().toString(), oduncAlacakUye);
 		oduncListesi[oduncSayisi] = yeniOdunc;
 		oduncSayisi++;
 		oduncVerilecekKitap.setAdet(oduncVerilecekKitap.getAdet()-1);
@@ -198,73 +198,102 @@ public class Kutuphane {
 		return -1;// uye dizide bulunmazsa -1 döner.
 	}
 	
-	/*Methodlar:
-	* kitapSil, kitapAra(ISBN),
-	*uyeSil, uyeAra(tcno)
-	**/
-	
-	//Getter & Setter
-	public int getGecikmePuan() {
-		return gecikmePuan;
+	//oduncListele
+	public void oduncListele() {
+		if (oduncSayisi == 0) {
+			System.out.println("Uye Bulunmamaktadır!");
+		}
+		else {
+			System.out.println("----------------Kutuphane Uye Listesi--------------------");
+			for (int i = 0; i < oduncSayisi; i++) {
+				System.out.println(oduncListesi[i]);
+			}
+		}
+		System.out.println("----------------------------------------------------------------");
 	}
 	
-	public void setGecikmePuan(int gecikmePuan) {
-		this.gecikmePuan = gecikmePuan;
+	//teslimAl
+	public void teslimAl(int oduncNo) {
+		if (oduncNo <= 0 || oduncNo > oduncSayisi || oduncListesi[oduncNo - 1] == null) {
+			System.out.println("Ödünç no geçersiz");
+			return;
+		}
+		Odunc odunc = oduncListesi[oduncNo - 1];
+		
+		if (odunc.getTeslimTarihi() != null) {
+			System.out.println("Bu kitap zaten teslim alınmış. İşleme devam edilemiyor!");
+			return;
+		}
+		//Teslim tarihi set etme
+		LocalDate teslimTarihi = LocalDate.now();
+		odunc.setTeslimTarihi(teslimTarihi.toString());
+		
+		//Teslim edilen kitabın adedini arttır.
+		Kitap teslimEdilenKitap = odunc.getKitap();
+		teslimEdilenKitap.setAdet(teslimEdilenKitap.getAdet() + 1);
+		
+		//Üyenin odunc aldığı kitap sayısını bir azalt
+		Uye kitapTeslimEdenUye = odunc.getUye();
+		kitapTeslimEdenUye.setOduncAldigiKitapSayisi(kitapTeslimEdenUye.getOduncAldigiKitapSayisi() - 1);
+		
+		//Kitabın üyede kalma süresi:
+		LocalDate oduncAlmaTarihi = LocalDate.parse(odunc.getOduncAlmaTarihi());
+		long uyedeKalmaSuresi = ChronoUnit.DAYS.between(oduncAlmaTarihi, teslimTarihi);
+		
+		//üye puanlama sistemi
+		if (uyedeKalmaSuresi > ODUNC_SURESI) {
+			long gecikmeSuresi = uyedeKalmaSuresi - ODUNC_SURESI;
+			int dusurelecekPuan = (int) (gecikmeSuresi * PUAN_CEZASI);
+			kitapTeslimEdenUye.setPuan(kitapTeslimEdenUye.getPuan() - dusurelecekPuan);
+			System.out.println("TESLİM SURESİ: " + gecikmeSuresi + " GÜN GECİKMİŞTİR. ÜYEDEN " + dusurelecekPuan + " " +
+					                   "PUAN " + "DÜŞMÜŞTÜR. UYENİN YENİ PUANI: " + kitapTeslimEdenUye.getPuan());
+		}
+		System.out.println("Teslim eden: " + kitapTeslimEdenUye.getAd() + " Teslim edilen kitap: " + teslimEdilenKitap.getAd());
+		//Eğer üye normal tarihinde teslim ederse, 1 puan artırabiliriz.
+		//toplam puan 150 olursa teslim süresi 2 katına çıkarılabilir.
+		//toplam puan 200 olursa alabileceği kitap sayısı 2 katına çıkar.
 	}
 	
-	public int getKitapSayisi() {
-		return kitapSayisi;
+	//kitapSil
+	// 1.stokta 2 kitap varken 1 tanesi ödünçte ise o silinebilir. Fakat 1 ise ödünç listesinde olan kitap silinemez
+	// 2. eğer kitap stok adedi 1'den fazla ise hem stok hemde adet bilgisi 1 azalmalı
+	// 3. eğer kitap stok adedi 1 tane ise kiitabı array'den silemeyiz.
+	public void kitapSil(String ISBN) {
+		int silinecekKitapIndex = kitapBul(ISBN);
+		if (silinecekKitapIndex == -1) {
+			System.out.println("Geçersiz ISBN numarası! Kitap yok!");
+			return;
+		}
+		
+		Kitap silecekKitap = kitaplar[silinecekKitapIndex];
+		
+		if (silecekKitap.getAdet() == 0) {
+			System.out.println("Ödünç verilen kitap silinemez");
+			return;
+		}
+		if (silecekKitap.getStok() == 1){
+			if (silinecekKitapIndex == kitapIndex-1){
+				System.out.println(silecekKitap.getAd()+" adlı kitap silindi!");
+				kitaplar[kitapSayisi-1] = null;
+				kitapSayisi--;
+				kitapIndex--;
+				return;
+			}
+			for (int i = silinecekKitapIndex; i<kitapIndex; i++){
+				kitaplar[i] = kitaplar[i+1];
+			}
+			kitaplar[kitapIndex-1] = null;
+			kitapSayisi--;
+			kitapIndex--;
+			System.out.println(silecekKitap.getAd()+" adlı kitap silindi!");
+			return;
+		}
+		if (silecekKitap.getStok()> 1){
+			silecekKitap.setStok(silecekKitap.getStok()-1);
+			silecekKitap.setAdet(silecekKitap.getAdet()-1);
+			System.out.println(silecekKitap.getAd()+ " isimli kitap adedi 1 azaltıldı.");
+		}
+		
 	}
-	
-	public void setKitapSayisi(int kitapSayisi) {
-		this.kitapSayisi = kitapSayisi;
-	}
-	
-	public Odunc[] getOduncListesi() {
-		return oduncListesi;
-	}
-	
-	public void setOduncListesi(Odunc[] oduncListesi) {
-		this.oduncListesi = oduncListesi;
-	}
-	
-	public Kitap[] getKitaplar() {
-		return kitaplar;
-	}
-	
-	public void setKitaplar(Kitap[] kitaplar) {
-		this.kitaplar = kitaplar;
-	}
-	
-	public int getOduncSayisi() {
-		return oduncSayisi;
-	}
-	
-	public void setOduncSayisi(int oduncSayisi) {
-		this.oduncSayisi = oduncSayisi;
-	}
-	
-	public int getOduncSuresi() {
-		return oduncSuresi;
-	}
-	
-	public void setOduncSuresi(int oduncSuresi) {
-		this.oduncSuresi = oduncSuresi;
-	}
-	
-	public Uye[] getUyeler() {
-		return uyeler;
-	}
-	
-	public void setUyeler(Uye[] uyeler) {
-		this.uyeler = uyeler;
-	}
-	//toString
-	
-	
-	@Override
-	public String toString() {
-		return "Kutuphane{" + "gecikmePuan=" + getGecikmePuan() + ", uyeler=" + Arrays.toString(getUyeler()) + ", " +
-				"oduncListesi=" + Arrays.toString(getOduncListesi()) + ", kitaplar=" + Arrays.toString(getKitaplar()) + ", kitapSayisi=" + getKitapSayisi() + ", oduncSayisi=" + getOduncSayisi() + ", oduncSuresi=" + getOduncSuresi() + '}';
-	}
+	//uyeSil, uye üzerinde kitap varsa silinemez
 }

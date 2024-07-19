@@ -1,5 +1,7 @@
 package com.ajwalker.week04.kupuhane;
 
+import java.time.LocalDate;
+
 public class KutuphaneApp {
 	public static void main(String[] args) {
 		Kutuphane kutuphane1 = new Kutuphane();
@@ -19,9 +21,8 @@ public class KutuphaneApp {
 		kutuphane1.uyeEkle(uye2);
 		kutuphane1.uyeListele();
 		
-		kutuphane1.oduncVer("9786256691223", "92914443123");
-		kutuphane1.oduncVer("9786059681001", "92914443123");
 		kutuphane1.oduncVer("9786256691223", "12214423153");
-		kutuphane1.oduncVer("9786059681001", "12214423153");
+		
+		kutuphane1.kitapSil("9786256691223");
 	}
 }

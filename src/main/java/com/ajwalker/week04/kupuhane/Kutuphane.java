@@ -472,7 +472,7 @@ public class Kutuphane {
 			System.out.println("Üye ödünç aldığı tüm kitapları teslim etmiştir.");
 			return;
 		}
-		String kitapAdi = "";
+		String kitapAdi;
 		System.out.println(uyeler[arananUyeIndex].getAd()+" adlı üyede olan kitaplar:");
 		for (int uyeOduncIndex: uyeninOduncIndexleri){
 			if (oduncListesi[uyeOduncIndex].getTeslimTarihi() == null){

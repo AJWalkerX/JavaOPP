@@ -1,6 +1,8 @@
 package com.ajwalker.week05.intheritance.inheritance.entities;
 
-public class Hizmetli extends Personel{
+import com.ajwalker.week05.intheritance.inheritance.services.Personel;
+
+public class Hizmetli extends Personel {
 	String gorevAlani;
 	
 	public Hizmetli(String ad) {

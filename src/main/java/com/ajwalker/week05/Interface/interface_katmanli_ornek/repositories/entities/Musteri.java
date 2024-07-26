@@ -2,59 +2,49 @@ package com.ajwalker.week05.Interface.interface_katmanli_ornek.repositories.enti
 
 import java.util.UUID;
 
-public class Musteri {
-	private String uuid;
-	private String name;
-	private String surname;
-	private String address;
-	private String mobile;
+public class Musteri{
+	String uuid;
+	String ad;
+	String soyad;
+	String adres;
 	
-	public Musteri(String address, String mobile, String name, String surname) {
-		this.address = address;
-		this.mobile = mobile;
-		this.name = name;
-		this.surname = surname;
-		this.uuid = java.util.UUID.randomUUID().toString();
+	public Musteri(String ad, String soyad, String adres) {
+		this.ad = ad;
+		this.adres = adres;
+		this.soyad = soyad;
+		this.uuid = UUID.randomUUID().toString();
 	}
 	
-	public String getUUID() {
+	public String getUuid() {
 		return uuid;
 	}
 	
-	public String getAddress() {
-		return address;
+	public String getAd() {
+		return ad;
 	}
 	
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAd(String ad) {
+		this.ad = ad;
 	}
 	
-	public String getMobile() {
-		return mobile;
+	public String getAdres() {
+		return adres;
 	}
 	
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setAdres(String adres) {
+		this.adres = adres;
 	}
 	
-	public String getName() {
-		return name;
+	public String getSoyad() {
+		return soyad;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getSurname() {
-		return surname;
-	}
-	
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setSoyad(String soyad) {
+		this.soyad = soyad;
 	}
 	
 	@Override
 	public String toString() {
-		return "Musteri{" + "address='" + getAddress() + '\'' + ", UUID='" + getUUID() + '\'' + ", name='" + getName() + '\'' + ", surname='" + getSurname() + '\'' + ", mobile='" + getMobile() + '\'' + '}';
+		return "Musteri{" + "ad='" + getAd() + '\'' + ", uuid='" + getUuid() + '\'' + ", soyad='" + getSoyad() + '\'' + ", adres='" + getAdres() + '\'' + '}';
 	}
 }
